@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tf-web
+  template:
+    metadata:
+      labels:
+        app: tf-web
+    spec:
+      containers:
+        - name: web
+          image: ticketforge-web:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: tf-config
+          env:
+            - name: PORT
+              value: "3000"
+            - name: HOSTNAME
+              value: "0.0.0.0"
+            - name: NEXT_PUBLIC_API_URL
+              value: "http://localhost:3001/graphql"  # Browser talks to Localhost
+            - name: API_URL_INTERNAL
+              value: "http://tf-api:3001/graphql"     # Server talks to K8s Service Name
+            - name: NODE_ENV
+              value: "production"
+          livenessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tf-web
+spec:
+  type: LoadBalancer
+  selector:
+    app: tf-web
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

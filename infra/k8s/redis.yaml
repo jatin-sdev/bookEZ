@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tf-redis
+  template:
+    metadata:
+      labels:
+        app: tf-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:alpine
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tf-redis
+spec:
+  selector:
+    app: tf-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379

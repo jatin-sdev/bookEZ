@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tf-worker
+  template:
+    metadata:
+      labels:
+        app: tf-worker
+    spec:
+      containers:
+        - name: worker
+          image: ticketforge-worker:latest
+          imagePullPolicy: IfNotPresent
+          command: ["node", "dist/worker.js"]
+          envFrom:
+            - configMapRef:
+                name: tf-config
+          env:
+            # Secrets
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: DATABASE_URL
+            - name: JWT_ACCESS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: JWT_ACCESS_SECRET
+            - name: JWT_REFRESH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: JWT_REFRESH_SECRET
+            - name: JWT_ACCESS_EXPIRY
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: JWT_ACCESS_EXPIRY
+            - name: JWT_REFRESH_EXPIRY
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: JWT_REFRESH_EXPIRY
+            - name: CLOUDINARY_CLOUD_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: CLOUDINARY_CLOUD_NAME
+            - name: CLOUDINARY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: CLOUDINARY_API_KEY
+            - name: CLOUDINARY_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: CLOUDINARY_API_SECRET
+            - name: RAZORPAY_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: RAZORPAY_KEY_ID
+            - name: RAZORPAY_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: RAZORPAY_KEY_SECRET

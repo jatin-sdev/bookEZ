@@ -1,0 +1,232 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  test:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: jatin
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: ticketforge
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      zookeeper:
+        image: confluentinc/cp-zookeeper:7.6.1
+        ports:
+          - 2181:2181
+        env:
+          ZOOKEEPER_CLIENT_PORT: 2181
+          ZOOKEEPER_TICK_TIME: 2000
+        options: >-
+          --health-cmd "echo ruok | nc localhost 2181"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      kafka:
+        image: confluentinc/cp-kafka:7.6.1
+        ports:
+          - 9092:9092
+        env:
+          KAFKA_BROKER_ID: 1
+          KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,PLAINTEXT_INTERNAL://broker:29092
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+          KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+        options: >-
+          --health-cmd "kafka-broker-api-versions --bootstrap-server localhost:9092"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - name: Setup pnpm cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Migrations
+        run: |
+          cd apps/api
+          pnpm db:push
+        env:
+          DATABASE_URL: postgres://jatin:password@localhost:5432/ticketforge
+
+
+      - name: Test
+        run: pnpm turbo run test
+        env:
+          DATABASE_URL: postgres://jatin:password@localhost:5432/ticketforge
+          REDIS_URL: redis://localhost:6379
+          KAFKA_BROKER: localhost:9092
+          JWT_ACCESS_SECRET: test_access_secret
+          JWT_REFRESH_SECRET: test_refresh_secret
+          JWT_ACCESS_EXPIRY: 15m
+          JWT_REFRESH_EXPIRY: 7d
+          CLOUDINARY_CLOUD_NAME: test
+          CLOUDINARY_API_KEY: test
+          CLOUDINARY_API_SECRET: test
+          RAZORPAY_KEY_ID: test
+          RAZORPAY_KEY_SECRET: test
+
+  build:
+    name: Build & Push
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and Push API
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/ticketforge-api:latest
+            ${{ secrets.DOCKER_USERNAME }}/ticketforge-api:${{ github.sha }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/ticketforge-api:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/ticketforge-api:buildcache,mode=max
+
+      - name: Build and Push Worker
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/ticketforge-worker:latest
+            ${{ secrets.DOCKER_USERNAME }}/ticketforge-worker:${{ github.sha }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/ticketforge-worker:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/ticketforge-worker:buildcache,mode=max
+
+      - name: Build and Push Web
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: true
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/ticketforge-web:latest
+            ${{ secrets.DOCKER_USERNAME }}/ticketforge-web:${{ github.sha }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/ticketforge-web:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_USERNAME }}/ticketforge-web:buildcache,mode=max
+
+  deploy:
+    name: Deploy
+    needs: build  # Waits for 'build' job to succeed
+    if: github.event_name == 'push' && github.ref == 'refs/heads/deploy'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "🚀 Starting Deployment on AWS..."
+            
+            # 1. Navigate to Project
+            cd ~/TicketForge-AI
+            
+            # 2. Pull Latest Code (Using the PAT we setup)
+            git fetch --all
+            git reset --hard origin/deploy
+            
+            # 3. The "Nuclear" Restart (Ensures Clean State)
+            cd infra/docker
+            
+            echo "🛑 Stopping Old Containers..."
+            docker compose down -v
+            
+            # (Optional) Ensure Nginx port is free
+            sudo fuser -k 80/tcp || true
+            
+            echo "🛠 Rebuilding & Starting..."
+            # Rebuild on the server to ensure latest code is used
+            docker compose up -d --build
+            
+            # 4. Database Setup
+            echo "⏳ Waiting for Database..."
+            sleep 15
+            
+            echo "🌱 Seeding Database..."
+            docker compose exec -T api npm run db:push
+            docker compose exec -T api npm run db:setup-partitions
+            docker compose exec -T api npm run db:seed
+            
+            echo "✅ Deployment Success!"
+            

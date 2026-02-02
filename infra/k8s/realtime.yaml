@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-realtime
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tf-realtime
+  template:
+    metadata:
+      labels:
+        app: tf-realtime
+    spec:
+      containers:
+        - name: realtime
+          image: ticketforge-realtime:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3002
+          envFrom:
+            - configMapRef:
+                name: tf-config
+          env:
+            - name: REALTIME_PORT
+              value: "3002"
+            # KAFKA_BROKER is in ConfigMap
+            # REDIS_URL is in ConfigMap
+          livenessProbe:
+            tcpSocket:
+              port: 3002
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            tcpSocket:
+              port: 3002
+            initialDelaySeconds: 15
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tf-realtime
+spec:
+  selector:
+    app: tf-realtime
+  ports:
+    - protocol: TCP
+      port: 3002
+      targetPort: 3002

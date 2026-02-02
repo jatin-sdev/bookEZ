@@ -1,0 +1,91 @@
+admin@tf.com
+12345678
+
+user@tf.com
+12345678
+
+___________________________________________________________________
+
+(reset -> push -> partitions -> seed)
+
+
+# Reset the entire database (drops all tables/enums):
+pnpm --filter api run db:reset
+
+# Apply schema changes directly to the database (no migration files)
+pnpm --filter api db:push
+
+
+# Fix the partitioned table
+pnpm --filter api db:setup-partitions 
+
+pnpm --filter api db:seed
+
+# 1. Generate migration files from schema changes
+pnpm --filter api db:generate
+pnpm --filter api exec drizzle-kit generate
+
+# 2. Apply migrations to database
+pnpm --filter api db:migrate
+pnpm --filter api exec drizzle-kit migrate
+
+# Add new package
+pnpm --filter api add package-name
+___________________________________________________________________
+
+# Run API tests
+pnpm --filter api test
+
+# Run Frontend tests
+pnpm exec playwright test --config playwright.config.ts
+
+# Run All tests
+pnpm test
+___________________________________________________________________
+
+database
+
+cd apps/api
+npx drizzle-kit studio
+
+___________________________________________________________________
+
+Note - 
+
+If tests fails - Wait 35 seconds for rate limit to clear and try again
+
+when change in schema, run cd apps/web and then run
+pnpm codegen
+
+___________________________________________________________________
+
+payment
+
+for OTP -> pay later
+Card Number: 5104 0155 5555 5558
+Expiry Date: 12/30
+CVV: 123
+Name on Card: Test User
+UPI ID: success@razorpay
+
+For the Card Error: Your "Unregistered" account status is strict, and Razorpay is rejecting the test card (even the domestic one) because its system sees the test BIN as "International."
+___________________________________________________________________
+Docker
+
+# Build API
+docker build -f apps/api/Dockerfile -t ticketforge-api .
+
+# Build Web
+docker build -f apps/web/Dockerfile -t ticketforge-web .
+
+docker build -f apps/realtime/Dockerfile -t ticketforge-realtime .
+
+___________________________________________________________________
+How to Run TicketForge-AI/infra/docker/docker-compose.yml
+
+1. cd infra/docker 
+2. docker compose down -v
+3. docker compose up -d
+
+
+

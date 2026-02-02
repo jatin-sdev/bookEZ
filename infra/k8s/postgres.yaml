@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tf-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tf-postgres
+  template:
+    metadata:
+      labels:
+        app: tf-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: tf-secrets
+                  key: POSTGRES_DB
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tf-postgres
+spec:
+  selector:
+    app: tf-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

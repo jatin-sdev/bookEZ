@@ -1,0 +1,13 @@
+{
+  "ignore_dirs": [
+    "node_modules",
+    "apps/*/node_modules",
+    ".git",
+    ".turbo",
+    "dist",
+    "build",
+    "test-results",
+    "infra",
+    "packages"
+  ]
+}

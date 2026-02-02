@@ -1,0 +1,29 @@
+{
+  "name": "ticketforge-ai",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "predev": "",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.9",
+    "cross-env": "^10.1.0",
+    "prettier": "latest",
+    "turbo": "latest",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@9.7.0",
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}
