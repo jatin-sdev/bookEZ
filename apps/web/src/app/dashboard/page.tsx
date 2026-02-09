@@ -85,7 +85,7 @@ export default function DashboardPage() {
 
         {/* Content Tabs */}
         <Tabs defaultValue="wallet" className="w-full space-y-6">
-          <TabsList className="bg-slate-900 border border-slate-700 p-1 rounded-xl w-full md:w-auto inline-flex">
+          <TabsList className="bg-slate-900 border border-slate-800 p-1 rounded-xl w-full md:w-auto inline-flex">
             <TabsTrigger 
               value="wallet" 
               className="px-4 py-2 rounded-lg text-sm data-[state=active]:bg-slate-800 data-[state=active]:text-white data-[state=active]:shadow-sm transition-all flex gap-2"

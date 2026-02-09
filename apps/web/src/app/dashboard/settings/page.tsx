@@ -75,7 +75,7 @@ export default function SettingsPage() {
   if (error) {
     return (
       <div className="min-h-screen pt-24 bg-slate-950 flex items-center justify-center">
-        <div className="text-center p-6 bg-slate-900 rounded-xl shadow-sm border border-slate-700">
+        <div className="text-center p-6 bg-slate-900 rounded-xl shadow-sm border border-slate-800">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <p className="text-white font-semibold mb-2">Unable to load profile</p>
           <p className="text-slate-500 text-sm mb-4">{error}</p>
@@ -97,8 +97,8 @@ export default function SettingsPage() {
           </p>
         </div>
 
-        <section className="bg-slate-900 rounded-xl border border-slate-700 shadow-sm overflow-hidden">
-          <div className="p-6 border-b border-slate-700 bg-slate-800/50">
+        <section className="bg-slate-900 rounded-xl border border-slate-800 shadow-sm overflow-hidden">
+          <div className="p-6 border-b border-slate-800 bg-slate-800/50">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-900/30 rounded-lg">
                 <User className="w-5 h-5 text-primary" />
@@ -116,7 +116,7 @@ export default function SettingsPage() {
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Full Name
                 </label>
-                <p className="text-lg font-medium text-white bg-slate-950/50 px-4 py-3 rounded-lg border border-slate-700/50">
+                <p className="text-lg font-medium text-white bg-slate-950/50 px-4 py-3 rounded-lg border border-slate-800/50">
                   {profile.name}
                 </p>
               </div>
@@ -125,7 +125,7 @@ export default function SettingsPage() {
                 <label className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Email Address
                 </label>
-                <div className="flex items-center gap-2 text-lg font-medium text-white bg-slate-950/50 px-4 py-3 rounded-lg border border-slate-700/50">
+                <div className="flex items-center gap-2 text-lg font-medium text-white bg-slate-950/50 px-4 py-3 rounded-lg border border-slate-800/50">
                   <Mail className="w-4 h-4 text-slate-500" />
                   {profile.email}
                 </div>

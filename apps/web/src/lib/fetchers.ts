@@ -16,15 +16,3 @@ export async function fetchServer<TResult = any, TVariables = any>(
     variables as any
   );
 }
-
-export async function fetchClient<TResult = any, TVariables = any>(
-  document: TypedDocumentNode<TResult, TVariables> | DocumentNode | string,
-  variables?: TVariables
-): Promise<TResult> {
-  const endpoint = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000').replace(/\/graphql\/?$/, '') + '/graphql';
-  return request(
-    endpoint,
-    document as any, 
-    variables as any
-  );
-}

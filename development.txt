@@ -86,14 +86,6 @@ How to Run TicketForge-AI/infra/docker/docker-compose.yml
 1. cd infra/docker 
 2. docker compose down -v
 3. docker compose up -d
-___________________________________________________________________
 
-test ML model
-cd apps/api && pnpm exec tsx src/scripts/testHotModel.ts
 
-traffic simulation script
-npx tsx src/scripts/simulate-traffic.ts
 
-pnpm --filter api test apps/api/src/analytics/__tests__/analytics.service.test.ts
-
-___________________________________________________________________

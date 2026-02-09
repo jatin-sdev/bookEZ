@@ -142,13 +142,13 @@ export default function PaymentForm({ orderId, amount, onPaySuccess }: PaymentFo
   };
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden h-full flex flex-col">
-      <div className="p-6 border-b border-slate-100 dark:border-slate-700">
+    <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden h-full flex flex-col">
+      <div className="p-6 border-b border-slate-100 dark:border-slate-800">
         <h3 className="text-lg font-bold text-slate-900 dark:text-white">Select Payment Method</h3>
       </div>
 
       {/* Tabs */}
-      <div className="grid grid-cols-3 border-b border-slate-100 dark:border-slate-700">
+      <div className="grid grid-cols-3 border-b border-slate-100 dark:border-slate-800">
         {[
           { id: "CARD", icon: CreditCard, label: "Card" },
           { id: "UPI", icon: QrCode, label: "UPI" },
@@ -201,7 +201,7 @@ export default function PaymentForm({ orderId, amount, onPaySuccess }: PaymentFo
       </div>
 
       {/* Footer */}
-      <div className="p-6 border-t border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50">
+      <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50">
         <Button 
             onClick={handlePayment} 
             disabled={isProcessing || !isRazorpayLoaded}

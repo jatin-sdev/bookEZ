@@ -197,47 +197,6 @@ export default function EditEventPage({ params }: { params: Promise<{ id: string
               value={formData.imageUrl}
               onChange={e => setFormData({...formData, imageUrl: e.target.value})}
             />
-             <input
-              type="file"
-              id="image-upload"
-              className="hidden"
-              accept="image/*"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (!file) return;
-
-                const uploadData = new FormData();
-                uploadData.append('file', file);
-                
-                try {
-                  const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000').replace(/\/graphql\/?$/, '');
-                  const res = await fetch(`${BASE_URL}/api/upload`, {
-                    method: 'POST',
-                    body: uploadData,
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
-                    }
-                  });
-                  
-                  if (!res.ok) throw new Error('Upload failed');
-                  
-                  const data = await res.json();
-                  setFormData(prev => ({ ...prev, imageUrl: data.url }));
-                  addToast("Image uploaded successfully", "success");
-                } catch (err) {
-                  console.error(err);
-                  addToast("Failed to upload image", "error");
-                }
-              }}
-            />
-            <Button 
-              type="button" 
-              variant="outline" 
-              className="shrink-0"
-              onClick={() => document.getElementById('image-upload')?.click()}
-            >
-               <Upload className="w-4 h-4 mr-2" /> Upload
-            </Button>
           </div>
         </div>
 

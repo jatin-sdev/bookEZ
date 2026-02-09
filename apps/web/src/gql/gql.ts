@@ -13,18 +13,15 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  mutation CancelBooking($orderId: ID!) {\n    cancelBooking(orderId: $orderId)\n  }\n": types.CancelBookingDocument,
-    "\n  query GetMyOrders {\n    myOrders {\n      id\n      status\n      totalAmount\n      createdAt\n      eventId\n      tickets {\n        id\n        sectionName\n        row\n        number\n        qrCode\n      }\n      event {\n        id\n        name\n        date\n        venue {\n          name\n        }\n      }\n    }\n  }\n": types.GetMyOrdersDocument,
+    "\n  query GetMyOrders {\n    myOrders {\n      id\n      status\n      totalAmount\n      createdAt\n      eventId\n      tickets {\n        id\n        sectionName\n        row\n        number\n        qrCode\n      }\n    }\n  }\n": types.GetMyOrdersDocument,
+    "\n  query GetEventsByIds($ids: [ID!]!) {\n    events {\n      id\n      name\n      date\n      venue {\n        name\n      }\n    }\n  }\n": types.GetEventsByIdsDocument,
     "\n  query GetEventDetails($id: ID!) {\n    event(id: $id) {\n      id\n      name\n      description\n      date\n      status\n      imageUrl\n      venue {\n        id\n        name\n        location\n        capacity\n      }\n    }\n  }\n": types.GetEventDetailsDocument,
-    "\n  query GetPublicEvents {\n    hotEvent {\n      id\n      name\n      date\n      description\n      imageUrl\n      venue {\n        name\n        location\n      }\n    }\n    events {\n      id\n      name\n      date\n      imageUrl\n      description\n      venue {\n        name\n        location\n      }\n    }\n  }\n": types.GetPublicEventsDocument,
+    "\n  query GetPublicEvents {\n    events {\n      id\n      name\n      date\n      imageUrl\n      description\n      venue {\n        name\n        location\n      }\n    }\n  }\n": types.GetPublicEventsDocument,
     "\n  query GetVenues {\n    venues {\n      id\n      name\n      location\n      capacity\n    }\n  }\n": types.GetVenuesDocument,
     "\n  mutation CreateEvent($input: CreateEventInput!) {\n    createEvent(input: $input) {\n      id\n      status\n    }\n  }\n": types.CreateEventDocument,
     "\n  mutation PublishEvent($id: ID!) {\n    publishEvent(id: $id) {\n      id\n      status\n    }\n  }\n": types.PublishEventDocument,
     "\n  mutation CreateVenue($input: CreateVenueInput!) {\n    createVenue(input: $input) {\n      id\n      name\n    }\n  }\n": types.CreateVenueDocument,
     "\n  mutation AddSection($venueId: ID!, $input: CreateSectionInput!) {\n    addSection(venueId: $venueId, input: $input) {\n      id\n    }\n  }\n": types.AddSectionDocument,
-    "\n  mutation CreatePaymentOrder($orderId: ID!) {\n    createPaymentOrder(orderId: $orderId) {\n      id\n      amount\n      currency\n      keyId\n    }\n  }\n": types.CreatePaymentOrderDocument,
-    "\n  mutation ConfirmPayment(\n    $orderId: ID!, \n    $razorpayOrderId: String!, \n    $razorpayPaymentId: String!, \n    $signature: String!\n  ) {\n    confirmPayment(\n      orderId: $orderId, \n      razorpayOrderId: $razorpayOrderId, \n      razorpayPaymentId: $razorpayPaymentId, \n      signature: $signature\n    )\n  }\n": types.ConfirmPaymentDocument,
-    "\n  mutation RecordEventView($eventId: ID!) {\n    recordEventView(eventId: $eventId)\n  }\n": types.RecordEventViewDocument,
     "\n  query GetBookingEventDetails($eventId: ID!) {\n    event(id: $eventId) {\n      id\n      name\n      venue {\n        id\n        name\n        sections {\n          id\n          name\n          capacity\n          basePrice \n        }\n      }\n    }\n  }\n": types.GetBookingEventDetailsDocument,
     "\n  query GetSectionSeats($eventId: ID!, $sectionId: ID!) {\n    sectionSeats(eventId: $eventId, sectionId: $sectionId) {\n      id\n      row\n      number\n      x\n      y\n      status\n      lockedBy\n    }\n  }\n": types.GetSectionSeatsDocument,
     "\n  mutation LockSeat($eventId: ID!, $seatId: ID!) {\n    lockSeat(eventId: $eventId, seatId: $seatId) { id status }\n  }\n": types.LockSeatDocument,
@@ -49,11 +46,11 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  mutation CancelBooking($orderId: ID!) {\n    cancelBooking(orderId: $orderId)\n  }\n"): (typeof documents)["\n  mutation CancelBooking($orderId: ID!) {\n    cancelBooking(orderId: $orderId)\n  }\n"];
+export function graphql(source: "\n  query GetMyOrders {\n    myOrders {\n      id\n      status\n      totalAmount\n      createdAt\n      eventId\n      tickets {\n        id\n        sectionName\n        row\n        number\n        qrCode\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetMyOrders {\n    myOrders {\n      id\n      status\n      totalAmount\n      createdAt\n      eventId\n      tickets {\n        id\n        sectionName\n        row\n        number\n        qrCode\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetMyOrders {\n    myOrders {\n      id\n      status\n      totalAmount\n      createdAt\n      eventId\n      tickets {\n        id\n        sectionName\n        row\n        number\n        qrCode\n      }\n      event {\n        id\n        name\n        date\n        venue {\n          name\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetMyOrders {\n    myOrders {\n      id\n      status\n      totalAmount\n      createdAt\n      eventId\n      tickets {\n        id\n        sectionName\n        row\n        number\n        qrCode\n      }\n      event {\n        id\n        name\n        date\n        venue {\n          name\n        }\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query GetEventsByIds($ids: [ID!]!) {\n    events {\n      id\n      name\n      date\n      venue {\n        name\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetEventsByIds($ids: [ID!]!) {\n    events {\n      id\n      name\n      date\n      venue {\n        name\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -61,7 +58,7 @@ export function graphql(source: "\n  query GetEventDetails($id: ID!) {\n    even
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query GetPublicEvents {\n    hotEvent {\n      id\n      name\n      date\n      description\n      imageUrl\n      venue {\n        name\n        location\n      }\n    }\n    events {\n      id\n      name\n      date\n      imageUrl\n      description\n      venue {\n        name\n        location\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPublicEvents {\n    hotEvent {\n      id\n      name\n      date\n      description\n      imageUrl\n      venue {\n        name\n        location\n      }\n    }\n    events {\n      id\n      name\n      date\n      imageUrl\n      description\n      venue {\n        name\n        location\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query GetPublicEvents {\n    events {\n      id\n      name\n      date\n      imageUrl\n      description\n      venue {\n        name\n        location\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPublicEvents {\n    events {\n      id\n      name\n      date\n      imageUrl\n      description\n      venue {\n        name\n        location\n      }\n    }\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -82,18 +79,6 @@ export function graphql(source: "\n  mutation CreateVenue($input: CreateVenueInp
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation AddSection($venueId: ID!, $input: CreateSectionInput!) {\n    addSection(venueId: $venueId, input: $input) {\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation AddSection($venueId: ID!, $input: CreateSectionInput!) {\n    addSection(venueId: $venueId, input: $input) {\n      id\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation CreatePaymentOrder($orderId: ID!) {\n    createPaymentOrder(orderId: $orderId) {\n      id\n      amount\n      currency\n      keyId\n    }\n  }\n"): (typeof documents)["\n  mutation CreatePaymentOrder($orderId: ID!) {\n    createPaymentOrder(orderId: $orderId) {\n      id\n      amount\n      currency\n      keyId\n    }\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation ConfirmPayment(\n    $orderId: ID!, \n    $razorpayOrderId: String!, \n    $razorpayPaymentId: String!, \n    $signature: String!\n  ) {\n    confirmPayment(\n      orderId: $orderId, \n      razorpayOrderId: $razorpayOrderId, \n      razorpayPaymentId: $razorpayPaymentId, \n      signature: $signature\n    )\n  }\n"): (typeof documents)["\n  mutation ConfirmPayment(\n    $orderId: ID!, \n    $razorpayOrderId: String!, \n    $razorpayPaymentId: String!, \n    $signature: String!\n  ) {\n    confirmPayment(\n      orderId: $orderId, \n      razorpayOrderId: $razorpayOrderId, \n      razorpayPaymentId: $razorpayPaymentId, \n      signature: $signature\n    )\n  }\n"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n  mutation RecordEventView($eventId: ID!) {\n    recordEventView(eventId: $eventId)\n  }\n"): (typeof documents)["\n  mutation RecordEventView($eventId: ID!) {\n    recordEventView(eventId: $eventId)\n  }\n"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

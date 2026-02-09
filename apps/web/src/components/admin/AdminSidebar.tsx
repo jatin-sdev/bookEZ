@@ -26,9 +26,9 @@ export default function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 z-50 bg-white dark:bg-background-dark border-r border-slate-200 dark:border-slate-700">
+    <aside className="hidden lg:flex w-64 flex-col fixed inset-y-0 z-50 bg-white dark:bg-background-dark border-r border-slate-200 dark:border-slate-800">
       {/* Logo */}
-      <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-700">
+      <div className="h-16 flex items-center gap-3 px-6 border-b border-slate-100 dark:border-slate-800">
         <div className="bg-primary rounded-lg p-1.5 flex items-center justify-center">
           <Ticket className="w-5 h-5 text-white" />
         </div>
@@ -61,7 +61,7 @@ export default function AdminSidebar() {
       </div>
 
       {/* Footer Nav */}
-      <div className="p-4 border-t border-slate-200 dark:border-slate-700 space-y-1">
+      <div className="p-4 border-t border-slate-200 dark:border-slate-800 space-y-1">
         <Link href="/admin/settings" className="flex items-center gap-3 px-3 py-2 text-slate-500 hover:text-primary transition-colors text-sm font-medium">
             <Settings className="w-5 h-5" /> Settings
         </Link>

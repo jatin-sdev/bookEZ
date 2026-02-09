@@ -2,8 +2,6 @@ import { eventService } from './events.service';
 import { seatService } from './seats.service';
 import { GraphQLError } from 'graphql';
 import { calculateDynamicPrice } from '../pricing/pricing.service';
-import { initHotEventModel, predictHotness } from '../ml/hotEventModel';
-import { recordView } from '../services/demand.service';
 
 // --- Security Helpers ---
 const requireAuth = (context: any) => {
@@ -70,43 +68,6 @@ export const eventResolvers = {
     //   const { eventId, sectionId } = args;
     //   return await seatService.getSeatsBySection(eventId, sectionId);
     // },
-
-    hotEvent: async () => {
-      // Lazy init model
-      await initHotEventModel();
-
-      // 1. Get candidate events (e.g. upcoming in next 30 days)
-      // For simplicity, we just fetch all upcoming
-      const events = await eventService.getEvents({});
-      
-      let hottestEvent = null;
-      let maxScore = -1;
-
-      for (const event of events) {
-        // 2. Get Stats
-        const stats = await eventService.getEventStats(event.id);
-        
-        // 3. Predict
-        const score = predictHotness(stats);
-        
-        if (score > maxScore) {
-          maxScore = score;
-          hottestEvent = event;
-        }
-      }
-      
-      // Threshold: If no event is "hot" (< 0.5), maybe return null? 
-      // User asked to "display 'hot' event", implying always show the top one, 
-      // or maybe only if it's actually hot. Let's return the top one if score > 0.
-      
-      if (hottestEvent && maxScore > 0) {
-        return {
-           ...withVenue(hottestEvent),
-           date: hottestEvent.date instanceof Date ? hottestEvent.date.toISOString() : hottestEvent.date
-        };
-      }
-      return null;
-    },
 
     // sectionSeats: async (args: any) => {
     //   const { eventId, sectionId } = args;
@@ -264,12 +225,6 @@ export const eventResolvers = {
       const { user } = context;
       requireAuth({ user });
       return await seatService.unlockSeat(eventId, seatId, user.id);
-    },
-
-    recordEventView: async (args: any) => {
-      const { eventId } = args;
-      await recordView(eventId);
-      return true;
     },
   }
 };

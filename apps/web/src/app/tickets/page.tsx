@@ -94,10 +94,10 @@ export default function TicketsPage() {
             {orders.map((order) => (
               <div 
                 key={order.id} 
-                className="bg-slate-900 rounded-2xl border border-slate-700 shadow-sm overflow-hidden"
+                className="bg-slate-900 rounded-2xl border border-slate-800 shadow-sm overflow-hidden"
               >
                 {/* Order Header */}
-                <div className="px-5 py-3 bg-slate-800/50 border-b border-slate-700 flex flex-wrap items-center justify-between gap-4">
+                <div className="px-5 py-3 bg-slate-800/50 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
                   <div className="space-y-1">
                     <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Order ID</p>
                     <p className="font-mono text-sm font-medium text-slate-300">
@@ -131,7 +131,7 @@ export default function TicketsPage() {
                   {order.tickets.map((ticket) => (
                     <div 
                       key={ticket.id}
-                      className="flex border border-slate-700 rounded-xl overflow-hidden hover:border-primary/50 transition-colors group"
+                      className="flex border border-slate-800 rounded-xl overflow-hidden hover:border-primary/50 transition-colors group"
                     >
                       {/* Ticket Info */}
                       <div className="flex-1 p-4 space-y-3">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, Suspense, useRef } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ArrowLeft, Clock, ShieldCheck, Ticket, Lock } from "lucide-react";
 import Link from "next/link";
@@ -8,14 +8,6 @@ import { getOrder, Order } from "@/lib/api";
 import { useTimer } from "@/hooks/useTimer";
 import PaymentForm from "@/components/checkout/PaymentForm";
 import { useToast } from "@/components/ToastProvider";
-import { gql } from "graphql-request";
-import { graphqlClient } from "@/lib/graphql";
-
-const CANCEL_BOOKING = gql`
-  mutation CancelBooking($orderId: ID!) {
-    cancelBooking(orderId: $orderId)
-  }
-`;
 
 // Wrap content in Suspense for useSearchParams
 function CheckoutContent() {
@@ -53,50 +45,6 @@ function CheckoutContent() {
       .finally(() => setLoading(false));
   }, [orderId, router, addToast]);
 
-  // Handle Abandoned Checkout (Unmount / Navigation away)
-  // Handle Abandoned Checkout (Unmount / Navigation away)
-  // We use a ref to debounce the cleanup and handle React Strict Mode double-invocation
-  const cleanupTimeoutRef =  useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    // Only set up cleanup if we have a valid order ID
-    if (!orderId) return;
-
-    // Clear any pending cleanup from a previous unmount (Strict Mode handling)
-    if (cleanupTimeoutRef.current) {
-        console.log("♻️ Strict Mode: Cancelled pending cleanup for order", orderId);
-        clearTimeout(cleanupTimeoutRef.current);
-        cleanupTimeoutRef.current = null;
-    }
-
-    return () => {
-        // [CRITICAL] Check if we are really leaving the flow.
-        
-        const isSuccess = sessionStorage.getItem(`order_success_${orderId}`);
-        if(isSuccess) return;
-
-        // Debounce the actual cancellation call
-        cleanupTimeoutRef.current = setTimeout(() => {
-             console.log("⚠️ Abandoning checkout order (Debounced):", orderId);
-        
-            const query = JSON.stringify({
-                query: `mutation CancelBooking($orderId: ID!) { cancelBooking(orderId: $orderId) }`,
-                variables: { orderId }
-            });
-
-            fetch('http://localhost:4000/graphql', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken') || ''}`
-                },
-                body: query,
-                keepalive: true
-            }).catch(err => console.error("Failed to cancel abandoned order", err));
-        }, 1000); // 1 second delay to allow for Remount
-    };
-  }, [orderId]);
-
 
 
   if (loading) {
@@ -129,7 +77,7 @@ function CheckoutContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+          <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
             <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500">
               <Clock className="w-5 h-5 animate-pulse" />
             </div>
@@ -144,8 +92,8 @@ function CheckoutContent() {
 
           {/* LEFT: Order Summary */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30">
+            <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+              <div className="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
                 <h3 className="text-lg font-bold">Order Summary</h3>
               </div>
 
@@ -219,11 +167,7 @@ function CheckoutContent() {
             <PaymentForm
               orderId={order.id}
               amount={order.totalAmount}
-              onPaySuccess={() => {
-                 // Mark as success so unmount doesn't cancel it
-                 if (orderId) sessionStorage.setItem(`order_success_${orderId}`, 'true');
-                 router.push("/tickets");
-              }}
+              onPaySuccess={() => router.push("/tickets")}
             />
           </div>
 

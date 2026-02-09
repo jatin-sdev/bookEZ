@@ -63,9 +63,6 @@ export const eventTypeDefs = `
     
     # [FIX] You MUST add this line so the frontend can fetch seats!
     sectionSeats(eventId: ID!, sectionId: ID!): [Seat!]!
-
-    # Returns the "Hottest" event based on ML model
-    hotEvent: Event
   }
 
   input CreateVenueInput {
@@ -144,6 +141,7 @@ export const eventTypeDefs = `
     publishEvent(id: ID!): Event!
     deleteEvent(id: ID!): Boolean!
 
+    # --- User: Real-Time Locking ---
     """
     Temporarily locks a seat for the user. 
     Returns the updated Seat object.
@@ -154,8 +152,5 @@ export const eventTypeDefs = `
     Releases a held seat.
     """
     unlockSeat(eventId: ID!, seatId: ID!): Boolean!
-
-    # --- Analytics & ML ---
-    recordEventView(eventId: ID!): Boolean!
   }
 `;

@@ -1,5 +1,4 @@
-import { Kafka, Producer, Consumer } from 'kafkajs';
-import { Server } from 'socket.io';
+import { Kafka, Producer } from 'kafkajs';
 import { env } from '../config/env';
 import { logger } from './logger';
 
@@ -56,63 +55,4 @@ export const sendEvent = async (topic: string, type: string, payload: any) => {
       logger.error('❌ Failed to send Kafka event', error);
     }
   }
-};
-
-let consumer: Consumer | null = null;
-
-export const connectKafkaConsumer = async (io: Server) => {
-  if (consumer) return consumer;
-
-  consumer = kafka.consumer({ groupId: 'api-websocket-gateway' });
-
-  try {
-    await consumer.connect();
-    logger.info('✅ Kafka Consumer connected');
-
-    await consumer.subscribe({ topic: 'seat-events', fromBeginning: false });
-
-    await consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        try {
-          const value = message.value?.toString();
-          if (!value) return;
-
-          const event = JSON.parse(value);
-          const { type, payload } = event;
-
-          if (topic === 'seat-events') {
-            let updatePayload: any = null;
-
-            if (type === 'SEATS_BOOKED') {
-              const { eventId, seatIds, status, triggeredBy } = payload;
-              updatePayload = { eventId, seatIds, status, lockedBy: triggeredBy };
-            } 
-            else if (type === 'SEAT_LOCKED') {
-              const { eventId, seatId, status, userId } = payload;
-              updatePayload = { eventId, seatIds: [seatId], status, lockedBy: userId };
-            }
-            else if (type === 'SEAT_UNLOCKED') {
-              const { eventId, seatId, status } = payload;
-               updatePayload = { eventId, seatIds: [seatId], status, lockedBy: null };
-            }
-
-            if (updatePayload) {
-              const { eventId, ...data } = updatePayload;
-              io.to(`event:${eventId}`).emit('seat-update', data);
-
-              logger.info(`CONSUMER PROCESSING: ${type} -> Broadcasting status '${data.status}' for ${data.seatIds?.length} seats to event:${eventId}`);
-              // logger.info(`Payload: ${JSON.stringify(data)}`);
-            }
-          }
-
-        } catch (err) {
-          logger.error('Error processing Kafka message', err);
-        }
-      },
-    });
-
-  } catch (error) {
-    logger.error('❌ Failed to connect Kafka Consumer', error);
-  }
-  return consumer;
 };

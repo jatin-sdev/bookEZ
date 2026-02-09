@@ -340,10 +340,7 @@ export class BookingService {
    * Cancels a booking and releases the associated seats back to the inventory.
    */
   async cancelBooking(userId: string, orderId: string) {
-    let eventId: string | null = null;
-    let seatIds: string[] = [];
-
-    await db.transaction(async (tx) => {
+    return await db.transaction(async (tx) => {
       // 1. Find the order
       const order = await tx.query.orders.findFirst({
         where: and(eq(orders.id, orderId), eq(orders.userId, userId)),
@@ -356,8 +353,6 @@ export class BookingService {
       if (order.status === 'CANCELLED') {
         throw new GraphQLError('Order is already cancelled', { extensions: { code: 'BAD_USER_INPUT' } });
       }
-      
-      eventId = order.eventId;
 
       // 2. Get tickets for this order
       const orderTickets = await tx
@@ -373,7 +368,7 @@ export class BookingService {
 
       // 4. Free the Seats (Change status back to AVAILABLE)
       // We get the seat IDs from the tickets associated with this order
-      seatIds = orderTickets.map((t) => t.seatId);
+      const seatIds = orderTickets.map((t) => t.seatId);
 
       if (seatIds.length > 0) {
         await tx
@@ -392,22 +387,6 @@ export class BookingService {
 
       return true;
     });
-
-    // 6. Emit Seat Release Event (Real-time update)
-    if (eventId && seatIds.length > 0) {
-        logger.info(`📢 Emitting SEAT_RELEASE for ${seatIds.length} seats in event ${eventId}`);
-        
-        void sendEvent('seat-events', 'SEATS_BOOKED', {
-            eventId,
-            seatIds,
-            status: 'AVAILABLE',
-            triggeredBy: userId
-        }).catch(err => logger.error("Failed to emit SEAT_RELEASE event", err));
-    } else {
-        logger.warn(`⚠️ Cancelled order ${orderId} but could not emit event: Missing eventId or seatIds`);
-    }
-
-    return true;
   }
 
   /**

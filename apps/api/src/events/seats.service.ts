@@ -117,12 +117,9 @@ export class SeatService {
   async lockSeat(eventId: string, seatId: string, userId: string) {
     const lockKey = `seat:lock:${eventId}:${seatId}`;
 
-    logger.info(`🔒 Attempting lock: Seat ${seatId} for User ${userId}`);
-
     // 1. Redis Cache Fast Fail (Optimization)
     const existingLock = await redis.get(lockKey);
     if (existingLock && existingLock !== userId) {
-      logger.warn(`❌ Redis Lock Conflict: Locked by ${existingLock} vs Request ${userId}`);
       throw new Error('Seat is currently selected by another user.');
     }
 
@@ -199,7 +196,6 @@ export class SeatService {
       }
       
       if (record.status === 'BOOKED' || record.status === 'RESERVED') {
-        logger.warn(`❌ DB Status Conflict: Seat is ${record.status}`);
         throw new Error('Seat is already booked');
       }
 
@@ -210,7 +206,6 @@ export class SeatService {
         // STRICT DB CHECK: If locked and not stale, ensure WE own it.
         // We do NOT rely on Redis here, DB is source of truth.
         if (!isStale && record.lockedBy !== userId) {
-             logger.warn(`❌ DB Lock Conflict: Locked by ${record.lockedBy}`);
              throw new Error('Seat is locked by another user');
         }
       }
@@ -239,8 +234,6 @@ export class SeatService {
       status: 'LOCKED',
       sectionId: physicalDetails.sectionId
     });
-
-    logger.info(`✅ Lock Success: Seat ${seatId}`);
 
     return { 
       id: seatId, 

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
 import Footer from '@/components/Footer';
-import { Calendar, MapPin, TrendingUp, Building2, Ticket, Plus, Users, DollarSign, ArrowRight, BarChart } from 'lucide-react';
+import { Calendar, MapPin, TrendingUp, Building2, Ticket, Plus, Users, DollarSign, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface Event {
@@ -101,12 +101,6 @@ export default function AdminDashboard() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Link href="/admin/analytics">
-              <Button variant="secondary" size="sm" className="h-9 gap-2">
-                <BarChart className="w-3.5 h-3.5" />
-                Analytics
-              </Button>
-            </Link>
             <Link href="/admin/venues/new">
               <Button variant="outline" size="sm" className="h-9 gap-2">
                 <Plus className="w-3.5 h-3.5" />
@@ -124,7 +118,7 @@ export default function AdminDashboard() {
 
         {/* Dense Stats Grid (4 columns) */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
             <div className="flex justify-between items-start mb-2">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Events</p>
               <Calendar className="w-4 h-4 text-slate-400" />
@@ -138,7 +132,7 @@ export default function AdminDashboard() {
             </div>
           </div>
           
-          <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
             <div className="flex justify-between items-start mb-2">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Venues</p>
               <Building2 className="w-4 h-4 text-slate-400" />
@@ -149,7 +143,7 @@ export default function AdminDashboard() {
             </div>
           </div>
           
-          <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
             <div className="flex justify-between items-start mb-2">
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tickets Sold</p>
               <Ticket className="w-4 h-4 text-slate-400" />
@@ -163,7 +157,7 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-slate-900 p-4 rounded-xl border border-slate-700 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
+          <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between hover:border-primary/50 transition-colors">
               <div className="flex justify-between items-start mb-2">
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Revenue</p>
                 <span className="w-4 h-4 text-slate-400 font-bold flex items-center justify-center">₹</span>
@@ -182,8 +176,8 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           
           {/* Recent Events Table - Compact */}
-          <div className="lg:col-span-2 bg-slate-900 rounded-xl border border-slate-700 shadow-sm overflow-hidden flex flex-col">
-            <div className="px-5 py-3 border-b border-slate-700 flex justify-between items-center bg-slate-800/30">
+          <div className="lg:col-span-2 bg-slate-900 rounded-xl border border-slate-800 shadow-sm overflow-hidden flex flex-col">
+            <div className="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-slate-800/30">
               <h2 className="text-sm font-bold text-white">Recent Events</h2>
               <Link href="/admin/events" className="text-xs text-primary font-medium hover:underline flex items-center gap-1">
                 View All <ArrowRight className="w-3 h-3" />
@@ -234,13 +228,13 @@ export default function AdminDashboard() {
           <div className="space-y-6">
             
             {/* Active Venues List - Compact */}
-            <div className="bg-slate-900 rounded-xl border border-slate-700 shadow-sm overflow-hidden">
-              <div className="px-5 py-3 border-b border-slate-700 flex justify-between items-center bg-slate-800/30">
+            <div className="bg-slate-900 rounded-xl border border-slate-800 shadow-sm overflow-hidden">
+              <div className="px-5 py-3 border-b border-slate-800 flex justify-between items-center bg-slate-800/30">
                 <h2 className="text-sm font-bold text-white">Active Venues</h2>
                 <Link href="/admin/venues" className="text-xs text-primary font-medium hover:underline">Manage</Link>
               </div>
-              <ul className="divide-y divide-slate-800 max-h-[500px] overflow-y-auto">
-                {venues.slice(0, 7).map((venue) => (
+              <ul className="divide-y divide-slate-800 max-h-[300px] overflow-y-auto">
+                {venues.slice(0, 5).map((venue) => (
                   <li key={venue.id} className="px-5 py-3 hover:bg-slate-800/30 flex justify-between items-center transition-colors group">
                     <div className="min-w-0">
                       <p className="text-sm font-medium text-white truncate group-hover:text-primary transition-colors">
@@ -265,7 +259,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Quick Action Widget */}
-            {/* <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-5 text-white shadow-lg">
+            <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl p-5 text-white shadow-lg">
                 <h3 className="text-sm font-bold mb-1">System Status</h3>
                 <div className="flex items-center gap-2 mb-4">
                     <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
@@ -281,7 +275,7 @@ export default function AdminDashboard() {
                         <p className="text-lg font-bold">12%</p>
                     </div>
                 </div>
-            </div> */}
+            </div>
 
           </div>
         </div>

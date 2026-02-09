@@ -13,9 +13,8 @@ import { errorHandler } from './middleware/error.middleware';
 import { apiRateLimiter } from './middleware/rate-limit.middleware';
 import { db } from './db';
 import { sql } from 'drizzle-orm';
-import { connectKafkaProducer, connectKafkaConsumer } from './lib/kafka';
+import { connectKafkaProducer } from './lib/kafka';
 import { initDemandModel } from "./ml/demandModel";
-import { initHotEventModel } from "./ml/hotEventModel";
 
 
 // --- GraphQL Imports ---
@@ -28,9 +27,6 @@ import { bookingResolvers } from './bookings/bookings.resolver';
 // Import User Module
 import { userTypeDefs } from './users/users.graphql';
 import { userResolvers } from './users/users.resolver';
-// Import Analytics Module
-import { analyticsTypeDefs } from './analytics/analytics.graphql';
-import { analyticsResolvers } from './analytics/analytics.resolver';
 
 
 
@@ -105,7 +101,6 @@ const schema = buildSchema(`
   ${eventTypeDefs}
   ${bookingTypeDefs}
   ${userTypeDefs}
-  ${analyticsTypeDefs}
 `);
 
 // --- Manual Resolver Attachment ---
@@ -166,9 +161,6 @@ const root = {
   // User Resolvers - flatten Query and Mutation
   ...userResolvers.Query,
   ...userResolvers.Mutation,
-
-  // Analytics Resolvers
-  ...analyticsResolvers.Query,
 };
 
 
@@ -260,21 +252,13 @@ app.use(errorHandler);
 
 httpServer.listen(env.PORT, async () => {
   try {
-    // 1️⃣ Initialize TensorFlow.js demand pricing model & Hot Event Model
-    await Promise.all([
-      initDemandModel(),
-      initHotEventModel()
-    ]);
-    logger.info("🤖 AI ML models (Pricing & HotEvents) initialized");
+    // 1️⃣ Initialize TensorFlow.js demand pricing model
+    await initDemandModel();
+    logger.info("🤖 AI demand pricing model initialized");
 
     // 2️⃣ Initialize Kafka Producer
     connectKafkaProducer().catch((err) => {
       logger.warn('⚠️  Kafka connection failed (non-critical):', err);
-    });
-
-    // 3️⃣ Initialize Kafka Consumer (WebSocket Bridge)
-    connectKafkaConsumer(io).catch((err: any) => {
-      logger.warn('⚠️  Kafka Consumer connection failed:', err);
     });
 
     // 3️⃣ Server ready
