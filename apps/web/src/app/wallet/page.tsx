@@ -114,7 +114,7 @@ export default function WalletPage() {
           </div>
 
           {/* Balance Card */}
-          <div className="bg-gradient-to-br from-primary to-primary-dark p-6 rounded-xl text-white shadow-lg">
+          {/* <div className="bg-gradient-to-br from-primary to-primary-dark p-6 rounded-xl text-white shadow-lg">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-white/80 text-sm font-medium mb-2">Available Balance</p>
@@ -132,11 +132,11 @@ export default function WalletPage() {
                 Withdraw
               </Button>
             </div>
-          </div>
+          </div> */}
 
           {/* Quick Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-slate-900 p-4 rounded-xl border border-slate-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-slate-900 p-4 rounded-xl border border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-500 mb-1">Total Spent</p>
@@ -150,7 +150,7 @@ export default function WalletPage() {
               </div>
             </div>
 
-            <div className="bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <div className="bg-slate-900 p-4 rounded-xl border border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-500 mb-1">Total Refunds</p>
@@ -164,7 +164,7 @@ export default function WalletPage() {
               </div>
             </div>
 
-            <div className="bg-slate-900 p-4 rounded-xl border border-slate-800">
+            <div className="bg-slate-900 p-4 rounded-xl border border-slate-700">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-500 mb-1">Pending</p>
@@ -177,11 +177,28 @@ export default function WalletPage() {
                 </div>
               </div>
             </div>
+
+            {/* New Dynamic Component: Spending Insights */}
+            <div className="bg-slate-900 p-4 rounded-xl border border-slate-700">
+               <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-500 mb-1">Avg. Transaction</p>
+                  <p className="text-2xl font-bold text-white">
+                    ₹{transactions.length > 0 
+                       ? (transactions.reduce((acc, t) => acc + t.amount, 0) / transactions.length).toFixed(2) 
+                       : '0.00'}
+                  </p>
+                </div>
+                <div className="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                </div>
+               </div>
+            </div>
           </div>
 
           {/* Transaction History */}
-          <div className="bg-slate-900 rounded-xl border border-slate-800">
-            <div className="px-5 py-3 border-b border-slate-800 bg-slate-800/30">
+          <div className="bg-slate-900 rounded-xl border border-slate-700">
+            <div className="px-5 py-3 border-b border-slate-700 bg-slate-800/30">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider">Transaction History</h3>
             </div>
             <div className="divide-y divide-slate-800">

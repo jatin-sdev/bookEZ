@@ -97,9 +97,9 @@ export default function AdminEventsPage() {
             </Link>
           </div>
 
-          <div className="bg-slate-900 rounded-xl border border-slate-800 shadow-sm overflow-hidden">
+          <div className="bg-slate-900 rounded-xl border border-slate-700 shadow-sm overflow-hidden">
             <table className="w-full text-left text-sm">
-              <thead className="bg-slate-800/50 border-b border-slate-800">
+              <thead className="bg-slate-800/50 border-b border-slate-700">
                 <tr>
                   <th className="px-6 py-4 font-bold text-slate-400">Event Name</th>
                   <th className="px-6 py-4 font-bold text-slate-400">Venue</th>

@@ -75,7 +75,7 @@ export default function DashboardPage() {
             ) : upcomingOrders.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {upcomingOrders.map((order) => (
-                  <div key={order.id} className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden hover:shadow-lg transition-all">
+                  <div key={order.id} className="group bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden hover:shadow-lg transition-all">
                     <div className="h-32 bg-slate-200 dark:bg-slate-800 relative bg-cover bg-center" style={{ backgroundImage: 'url(https://images.unsplash.com/photo-1540039155733-5bb30b53aa14)' }}>
                        <div className="absolute top-3 left-3 bg-white/90 dark:bg-black/80 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider">
                          Confirmed
@@ -87,7 +87,7 @@ export default function DashboardPage() {
                         <Calendar className="w-3 h-3" /> Oct 24 • <MapPin className="w-3 h-3" /> San Francisco
                       </p>
                       
-                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                      <div className="pt-4 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between">
                          <div className="flex items-center gap-2 text-green-600 dark:text-green-500 text-xs font-bold">
                             <CheckCircle2 className="w-4 h-4" /> Ready
                          </div>
@@ -98,7 +98,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-                <div className="p-8 text-center border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-2xl">
+                <div className="p-8 text-center border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">
                     <p className="text-slate-500">No upcoming events found.</p>
                 </div>
             )}
@@ -107,9 +107,9 @@ export default function DashboardPage() {
           {/* Past Bookings Table */}
           <section>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Past Bookings</h3>
-            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 overflow-hidden">
               <table className="w-full text-left text-sm">
-                <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800">
+                <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-700">
                   <tr>
                     <th className="px-6 py-4 font-semibold text-slate-500">Event</th>
                     <th className="px-6 py-4 font-semibold text-slate-500">Date</th>
@@ -151,7 +151,7 @@ export default function DashboardPage() {
            <WalletCard />
 
            {/* Recent Activity Mini-List */}
-           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6">
+           <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-700 p-6">
               <h3 className="font-bold text-lg mb-4 text-slate-900 dark:text-white">Recent Activity</h3>
               <div className="space-y-6">
                  <div className="flex gap-4">
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                     <span className="text-sm font-bold text-green-600 dark:text-green-500">+$500.00</span>
                  </div>
               </div>
-              <Button variant="ghost" className="w-full mt-6 text-xs border border-slate-200 dark:border-slate-800">
+              <Button variant="ghost" className="w-full mt-6 text-xs border border-slate-200 dark:border-slate-700">
                  View Full History
               </Button>
            </div>

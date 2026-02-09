@@ -81,7 +81,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
   return (
     <div className="bg-slate-950 min-h-screen pb-12 text-slate-200 font-sans">
       {/* 1. Header / Hero */}
-      <div className="bg-slate-900 border-b border-slate-800">
+      <div className="bg-slate-900 border-b border-slate-700">
         <div className="container max-w-6xl mx-auto px-4 py-8">
           <div className="flex flex-col md:flex-row gap-8 items-start">
             {/* Event Image */}
@@ -117,7 +117,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
             </div>
 
             {/* CTA Card (Desktop Right) */}
-            <div className="hidden md:block w-72 bg-slate-950/50 p-5 rounded-xl shadow-lg border border-slate-800 sticky top-24 shrink-0">
+            <div className="hidden md:block w-72 bg-slate-950/50 p-5 rounded-xl shadow-lg border border-slate-700 sticky top-24 shrink-0">
                <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-semibold text-slate-500 uppercase">Availability</span>
                   <span className="text-xs font-bold text-green-400 flex items-center gap-1">
@@ -148,7 +148,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
             <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-3 flex items-center gap-2">
                About Event
             </h2>
-            <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-sm">
+            <div className="bg-slate-900 p-6 rounded-xl border border-slate-700 shadow-sm">
               <div className="prose prose-sm prose-invert max-w-none text-slate-300 leading-relaxed whitespace-pre-line">
                 {event.description || "No description provided for this event."}
               </div>
@@ -158,12 +158,12 @@ export default async function EventDetailsPage({ params }: PageProps) {
           {/* Venue Info */}
           <section>
              <h2 className="text-sm font-bold text-white uppercase tracking-wider mb-3">Venue Information</h2>
-             <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 shadow-sm">
+             <div className="bg-slate-900 p-6 rounded-xl border border-slate-700 shadow-sm">
                <h3 className="text-lg font-semibold text-white mb-1">{event.venue.name}</h3>
                <p className="text-slate-400 text-sm mb-4">{event.venue.location}</p>
                
-               <div className="flex items-center gap-4 pt-4 border-t border-slate-800">
-                  <div className="text-center px-4 py-2 bg-slate-950 rounded-lg border border-slate-800">
+               <div className="flex items-center gap-4 pt-4 border-t border-slate-700">
+                  <div className="text-center px-4 py-2 bg-slate-950 rounded-lg border border-slate-700">
                      <span className="block text-xs text-slate-500 uppercase font-semibold">Capacity</span>
                      <span className="block text-lg font-mono text-white">{event.venue.capacity.toLocaleString()}</span>
                   </div>
@@ -174,7 +174,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
       </div>
 
       {/* Mobile Floating CTA */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-800 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3)] z-50 safe-area-bottom">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-slate-900 border-t border-slate-700 p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.3)] z-50 safe-area-bottom">
         <Link href={`/events/${event.id}/book`}>
           <Button size="lg" className="w-full font-semibold shadow-lg shadow-primary/20">
             Select Seats

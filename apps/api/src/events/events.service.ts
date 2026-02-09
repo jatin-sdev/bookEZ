@@ -232,6 +232,7 @@ export class EventService {
   // --- Events CRUD ---
   async getEvents(filters?: { minPrice?: number; maxPrice?: number; venueId?: string; startDate?: string; endDate?: string }) {
     const { minPrice, maxPrice, venueId, startDate, endDate } = filters || {};
+    logger.info(`🔍 [getEvents] Filters received: ${JSON.stringify(filters)}`);
 
     // Start with base query
     // Note: To filter by price, we need to check if ANY section matches the price range.
@@ -245,12 +246,21 @@ export class EventService {
     }
 
     if (startDate) {
-      // Date >= startDate
-      conditions.push(sql`${events.date} >= ${new Date(startDate).toISOString()}`);
+      // User expects "Events ON this date"
+      // Range: [StartDate 00:00, StartDate + 1 Day 00:00)
+      const start = new Date(startDate);
+      const end = new Date(startDate);
+      end.setDate(end.getDate() + 1);
+
+      conditions.push(sql`${events.date} >= ${start.toISOString()} AND ${events.date} < ${end.toISOString()}`);
+    } else {
+       // Default: Show upcoming events (future dates) if no filter
+       // conditions.push(sql`${events.date} >= NOW()`);
+       // Commented out default behavior to allow seeing past events if explicitly desired or empty filter means "All"
     }
 
     if (endDate) {
-      // Date <= endDate
+      // Explicit End Date range (if ever used)
       conditions.push(sql`${events.date} <= ${new Date(endDate).toISOString()}`);
     }
 

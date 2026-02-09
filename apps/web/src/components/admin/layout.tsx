@@ -32,7 +32,7 @@ export default function AdminLayout({
       
       <div className="lg:ml-64 min-h-screen flex flex-col">
         {/* Top Bar */}
-        <header className="h-16 sticky top-0 z-40 bg-slate-900 border-b border-slate-800 px-8 flex items-center justify-between">
+        <header className="h-16 sticky top-0 z-40 bg-slate-900 border-b border-slate-700 px-8 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span className="text-sm text-slate-400">Home / Dashboard</span>
             <div className="h-6 w-px bg-slate-800 mx-2" />

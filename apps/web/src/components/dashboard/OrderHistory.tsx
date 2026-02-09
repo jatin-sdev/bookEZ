@@ -18,10 +18,10 @@ export const OrderHistory: React.FC<OrderHistoryProps> = ({ orders }) => {
   });
 
   return (
-    <div className="bg-slate-900 rounded-2xl shadow-sm border border-slate-800 overflow-hidden">
+    <div className="bg-slate-900 rounded-2xl shadow-sm border border-slate-700 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left">
-          <thead className="bg-slate-800/50 border-b border-slate-800">
+          <thead className="bg-slate-800/50 border-b border-slate-700">
             <tr>
               <th className="p-4 font-semibold text-slate-400 text-xs uppercase tracking-wider">Event Details</th>
               <th className="p-4 font-semibold text-slate-400 text-xs uppercase tracking-wider hidden md:table-cell">Date</th>

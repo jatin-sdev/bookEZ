@@ -81,7 +81,7 @@ function CheckoutContent() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+          <div className="flex items-center gap-3 bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
              <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500">
                 <Clock className="w-5 h-5 animate-pulse" />
              </div>
@@ -96,8 +96,8 @@ function CheckoutContent() {
           
           {/* LEFT: Order Summary */}
           <div className="lg:col-span-5 space-y-6">
-             <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
-                <div className="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
+             <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30">
                     <h3 className="text-lg font-bold">Order Summary</h3>
                 </div>
                 

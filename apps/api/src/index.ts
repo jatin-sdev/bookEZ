@@ -6,6 +6,7 @@ import { createHandler } from 'graphql-http/lib/use/express';
 import { buildSchema } from 'graphql';
 import jwt from 'jsonwebtoken';
 import authRoutes from './auth/auth.routes';
+import bookingRoutes from './bookings/bookings.routes';
 import uploadRoutes from './upload/upload.routes';
 import { env } from './config/env';
 import { logger } from './lib/logger';
@@ -13,7 +14,7 @@ import { errorHandler } from './middleware/error.middleware';
 import { apiRateLimiter } from './middleware/rate-limit.middleware';
 import { db } from './db';
 import { sql } from 'drizzle-orm';
-import { connectKafkaProducer } from './lib/kafka';
+import { connectKafkaProducer, connectKafkaConsumer } from './lib/kafka';
 import { initDemandModel } from "./ml/demandModel";
 
 
@@ -72,6 +73,13 @@ app.use(cors());
 // If graphql-http has issues, we can revisit, but usually standard JSON parsing is fine or even required for some setups.
 app.use(express.json());
 
+// --- Swagger Documentation ---
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './docs/swagger/swagger.config';
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
 app.use(apiRateLimiter);
 
 // 2. Logging
@@ -84,6 +92,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use("/auth", authRoutes);
+app.use("/bookings", bookingRoutes);
 app.use("/api/upload", uploadRoutes);
 
 
@@ -259,6 +268,11 @@ httpServer.listen(env.PORT, async () => {
     // 2️⃣ Initialize Kafka Producer
     connectKafkaProducer().catch((err) => {
       logger.warn('⚠️  Kafka connection failed (non-critical):', err);
+    });
+
+    // 3️⃣ Initialize Kafka Consumer (WebSocket Bridge)
+    connectKafkaConsumer(io).catch((err: any) => {
+      logger.warn('⚠️  Kafka Consumer connection failed:', err);
     });
 
     // 3️⃣ Server ready

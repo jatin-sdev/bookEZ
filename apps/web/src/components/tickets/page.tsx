@@ -38,7 +38,7 @@ export default function MyTicketsPage() {
             <p className="text-slate-400">Loading your tickets...</p>
           </div>
         ) : orders.length === 0 ? (
-          <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-800">
+          <div className="text-center py-20 bg-white dark:bg-slate-900 rounded-3xl border border-dashed border-slate-200 dark:border-slate-700">
             <TicketIcon className="w-16 h-16 text-slate-200 dark:text-slate-700 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">No tickets yet</h2>
             <p className="text-slate-500 mb-6">Looks like you haven't booked any events.</p>

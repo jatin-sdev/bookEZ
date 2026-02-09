@@ -86,7 +86,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse, isMobileOpen, set
   const SidebarContent = () => (
     <>
       {/* Header */}
-      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-800">
+      <div className="h-16 flex items-center justify-between px-4 border-b border-slate-700">
         {(!isCollapsed || isMobileOpen) && (
           <Link href="/" className="flex items-center gap-2">
             <div className="bg-primary/10 p-1.5 rounded-lg">
@@ -130,7 +130,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse, isMobileOpen, set
         </div>
 
         {isLoggedIn && (
-          <div className="space-y-1 pt-4 border-t border-slate-800">
+          <div className="space-y-1 pt-4 border-t border-slate-700">
             {(!isCollapsed || isMobileOpen) && (
               <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                 My Account
@@ -143,7 +143,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse, isMobileOpen, set
         )}
 
         {isLoggedIn && userRole === 'ADMIN' && (
-          <div className="space-y-1 pt-4 border-t border-slate-800">
+          <div className="space-y-1 pt-4 border-t border-slate-700">
             {(!isCollapsed || isMobileOpen) && (
               <p className="px-3 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">
                 Administration
@@ -163,7 +163,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse, isMobileOpen, set
       {/* Desktop Sidebar */}
       <aside
         className={cn(
-          "hidden lg:flex flex-col fixed inset-y-0 left-0 z-40 bg-slate-900 border-r border-slate-800 transition-all duration-300 ease-in-out",
+          "hidden lg:flex flex-col fixed inset-y-0 left-0 z-40 bg-slate-900 border-r border-slate-700 transition-all duration-300 ease-in-out",
           isCollapsed ? "w-16" : "w-64"
         )}
       >

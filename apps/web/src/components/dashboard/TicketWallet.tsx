@@ -16,7 +16,7 @@ export const TicketWallet: React.FC<TicketWalletProps> = ({ orders, userFullName
   
   if (orders.length === 0) {
     return (
-      <div className="text-center py-20 bg-slate-900/50 rounded-3xl border border-dashed border-slate-800">
+      <div className="text-center py-20 bg-slate-900/50 rounded-3xl border border-dashed border-slate-700">
         <div className="bg-slate-800 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
           <TicketIcon className="w-10 h-10 text-slate-600" />
         </div>

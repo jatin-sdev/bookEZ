@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/Skeleton";
 
 export function EventCardSkeleton() {
   return (
-    <div className="flex flex-col h-full rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-900">
+    <div className="flex flex-col h-full rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden bg-white dark:bg-slate-900">
       {/* Image Skeleton */}
       <div className="aspect-[16/9] w-full">
         <Skeleton className="h-full w-full" />

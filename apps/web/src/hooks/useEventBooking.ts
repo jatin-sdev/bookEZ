@@ -192,11 +192,29 @@ export const useEventBooking = (eventId: string) => {
         }
     });
 
+    // [FIX] Listen for the unified event from Kafka Bridge
+    socket.on('seat-update', (p: any) => {
+        console.log(`🔔 Client Received seat-update: Status=${p.status}, Seats=${p.seatIds?.length}`, p);
+        if (p.seatIds && Array.isArray(p.seatIds)) {
+            p.seatIds.forEach((id: string) => {
+                // [FIX] Ignore my own locks so strict UI 'isDisabled' check doesn't block interaction.
+                // We rely on 'selectedSeats' state to show it as selected (Blue).
+                if (p.status === 'LOCKED' && p.lockedBy === userId) {
+                    console.log(`   -> Ignoring own lock for seat ${id}`);
+                    return;
+                }
+                
+                updateSeatStatus(id, p.status);
+            });
+        }
+    });
+
     return () => {
       socket.off('SEAT_LOCKED');
       socket.off('SEAT_UNLOCKED');
       socket.off('SEAT_BOOKED');
       socket.off('SEATS_BOOKED');
+      socket.off('seat-update');
     };
   }, [socket, userId]);
 

@@ -61,7 +61,7 @@ export default function Navigation({ isSidebarCollapsed, onMobileMenuToggle }: N
   return (
     <header 
       className={cn(
-        "fixed top-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 transition-all duration-300 ease-in-out",
+        "fixed top-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700 transition-all duration-300 ease-in-out",
         "left-0", // Always left-0 on mobile
         isSidebarCollapsed ? "lg:left-16" : "lg:left-64" // Dynamic on desktop
       )}
@@ -125,7 +125,7 @@ export default function Navigation({ isSidebarCollapsed, onMobileMenuToggle }: N
               {isUserMenuOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setIsUserMenuOpen(false)} />
-                  <div className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-800 rounded-xl shadow-xl py-2 z-50">
+                  <div className="absolute right-0 mt-2 w-56 bg-slate-900 border border-slate-700 rounded-xl shadow-xl py-2 z-50">
                     <Link
                       href="/dashboard/settings"
                       onClick={() => setIsUserMenuOpen(false)}

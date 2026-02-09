@@ -24,7 +24,7 @@ export default function TicketCard({
   qrCodeValue,
 }: TicketCardProps) {
   return (
-    <div className="flex flex-col md:flex-row w-full max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 relative group">
+    <div className="flex flex-col md:flex-row w-full max-w-3xl mx-auto bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 relative group">
       
       {/* Left: Event Visuals */}
       <div className="w-full md:w-2/5 relative h-48 md:h-auto bg-slate-900">
@@ -77,7 +77,7 @@ export default function TicketCard({
           </div>
         </div>
 
-        <div className="border-t border-slate-100 dark:border-slate-800 pt-6 flex items-center justify-between">
+        <div className="border-t border-slate-100 dark:border-slate-700 pt-6 flex items-center justify-between">
           <div className="text-[10px] text-slate-400 font-mono">
             ID: {ticketId.slice(0, 8).toUpperCase()}
           </div>

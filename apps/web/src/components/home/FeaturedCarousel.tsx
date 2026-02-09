@@ -5,7 +5,7 @@ import { Event } from "@/types/events";
 export default function FeaturedCarousel({ events }: { events: Event[] }) {
   if (events.length === 0) {
     return (
-      <div className="text-center py-20 px-4 md:px-10 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-3xl mx-4 md:mx-10">
+      <div className="text-center py-20 px-4 md:px-10 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl mx-4 md:mx-10">
         <TicketIcon className="w-12 h-12 text-slate-300 mx-auto mb-4" />
         <h3 className="text-lg font-bold text-slate-900 dark:text-white">No events scheduled</h3>
         <p className="text-slate-500 mt-2">Seed the database to see events here.</p>

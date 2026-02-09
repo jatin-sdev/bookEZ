@@ -177,11 +177,11 @@ export default function VenueDetailsPage() {
     }
   };
 
-  if (loading) return <div className="min-h-screen bg-background-light dark:bg-background-dark p-8 text-black dark:text-white">Loading...</div>;
-  if (!venue) return <div className="min-h-screen bg-background-light dark:bg-background-dark p-8 text-black dark:text-white">Venue not found</div>;
+  if (loading) return <div className="min-h-screen bg-background-light dark:bg-slate-950 p-8 text-black dark:text-white">Loading...</div>;
+  if (!venue) return <div className="min-h-screen bg-background-light dark:bg-slate-950 p-8 text-black dark:text-white">Venue not found</div>;
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark pb-20">
+    <div className="min-h-screen bg-background-light dark:bg-slate-950 pb-20">
       <div className="max-w-[1400px] mx-auto px-6 py-8 pt-24">
         <Link href="/admin/venues" className="text-sm text-slate-500 hover:text-slate-900 dark:hover:text-white mb-6 inline-block transition-colors">
           ← Back to Venues

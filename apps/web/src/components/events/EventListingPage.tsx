@@ -102,7 +102,7 @@ export default function EventListingPage({ title, description, categoryFilter }:
           </div>
 
           {/* Compact Filter Bar */}
-          <div className="flex flex-wrap items-center gap-3 bg-slate-900/50 p-3 rounded-lg border border-slate-800/50 backdrop-blur-sm">
+          <div className="flex flex-wrap items-center gap-3 bg-slate-900/50 p-3 rounded-lg border border-slate-700/50 backdrop-blur-sm">
              <div className="flex items-center gap-2">
                  <Filter className="w-4 h-4 text-slate-500" />
                  <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-2">Filters</span>
@@ -112,7 +112,7 @@ export default function EventListingPage({ title, description, categoryFilter }:
              <input 
                  type="date" 
                  value={filters.startDate}
-                 className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-300 focus:border-primary focus:ring-1 focus:ring-primary/50 outline-none h-8"
+                 className="bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-300 focus:border-primary focus:ring-1 focus:ring-primary/50 outline-none h-8"
                  onChange={(e) => setFilters(prev => ({ ...prev, startDate: e.target.value }))} 
              />
  
@@ -120,7 +120,7 @@ export default function EventListingPage({ title, description, categoryFilter }:
              <select 
                  value={filters.venueId}
                  onChange={(e) => setFilters(prev => ({ ...prev, venueId: e.target.value }))}
-                 className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-300 focus:border-primary focus:ring-1 focus:ring-primary/50 outline-none h-8 min-w-[140px]"
+                 className="bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-300 focus:border-primary focus:ring-1 focus:ring-primary/50 outline-none h-8 min-w-[140px]"
              >
                  <option value="">All Venues</option>
                  {venues.map(v => (
@@ -129,23 +129,26 @@ export default function EventListingPage({ title, description, categoryFilter }:
              </select>
  
              {/* 3. Price Filter */}
-              <select 
+             <select 
                  value={filters.priceRange}
                  onChange={(e) => {
                      const val = e.target.value;
                      let min: number | undefined, max: number | undefined;
-                     if (val === '0-50') { min = 0; max = 50; }
-                     else if (val === '50-100') { min = 50; max = 100; }
-                     else if (val === '100+') { min = 100; }
+                     // Values are in RUPEES, Backend expects PAISE (x100)
+                     if (val === '0-500') { min = 0; max = 500 * 100; }
+                     else if (val === '500-1000') { min = 500 * 100; max = 1000 * 100; }
+                     else if (val === '1000-5000') { min = 1000 * 100; max = 5000 * 100; }
+                     else if (val === '5000+') { min = 5000 * 100; }
                      
                      setFilters(prev => ({ ...prev, priceRange: val, minPrice: min, maxPrice: max }));
                  }}
-                 className="bg-slate-950 border border-slate-800 rounded px-2.5 py-1.5 text-xs text-slate-300 focus:border-primary focus:ring-1 focus:ring-primary/50 outline-none h-8 min-w-[120px]"
+                 className="bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-xs text-slate-300 focus:border-primary focus:ring-1 focus:ring-primary/50 outline-none h-8 min-w-[120px]"
              >
                  <option value="">Any Price</option>
-                 <option value="0-50">Under ₹500</option>
-                 <option value="50-100">₹500 - ₹1000</option>
-                 <option value="100+">Over ₹5000</option>
+                 <option value="0-500">Under ₹500</option>
+                 <option value="500-1000">₹500 - ₹1000</option>
+                 <option value="1000-5000">₹1000 - ₹5000</option>
+                 <option value="5000+">Over ₹5000</option>
              </select>
  
              <div className="ml-auto flex items-center gap-2">
@@ -177,13 +180,13 @@ export default function EventListingPage({ title, description, categoryFilter }:
             // Loading skeleton
             <>
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <div key={i} className="bg-slate-900/50 border border-slate-800 rounded-xl aspect-[3/4] animate-pulse" />
+                <div key={i} className="bg-slate-900/50 border border-slate-700 rounded-xl aspect-[3/4] animate-pulse" />
               ))}
             </>
           ) : events.length > 0 ? (
             events.map((event) => (
               <Link key={event.id} href={`/events/${event.id}`} className="group block h-full">
-                <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden hover:border-slate-700 transition-all duration-300 h-full flex flex-col group-hover:shadow-lg group-hover:shadow-primary/5">
+                <div className="bg-slate-900 border border-slate-700 rounded-xl overflow-hidden hover:border-slate-700 transition-all duration-300 h-full flex flex-col group-hover:shadow-lg group-hover:shadow-primary/5">
                   {/* Image */}
                   <div className="relative aspect-video overflow-hidden bg-slate-800">
                     <div 
@@ -217,7 +220,7 @@ export default function EventListingPage({ title, description, categoryFilter }:
                       </h3>
                     </div>
                     
-                    <div className="mt-auto pt-3 border-t border-slate-800/50 flex items-center justify-between">
+                    <div className="mt-auto pt-3 border-t border-slate-700/50 flex items-center justify-between">
                       <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium truncate max-w-[70%]">
                         <MapPin className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate">{event.venue.name}</span>
@@ -229,7 +232,7 @@ export default function EventListingPage({ title, description, categoryFilter }:
               </Link>
             ))
           ) : (
-            <div className="col-span-full py-16 text-center border border-dashed border-slate-800 rounded-2xl bg-slate-900/30">
+            <div className="col-span-full py-16 text-center border border-dashed border-slate-700 rounded-2xl bg-slate-900/30">
                <p className="text-slate-500 text-sm">
                  {searchQuery ? `No events found for "${searchQuery}"` : "No events available."}
                </p>

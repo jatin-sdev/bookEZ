@@ -28,10 +28,10 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
 
   if (isLoading || isAuthLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex items-center justify-center min-h-screen bg-slate-950">
         <div className="flex flex-col items-center gap-4">
           <span className="loading loading-spinner loading-lg text-primary"></span>
-          <p className="text-gray-500 font-medium">Loading venue map...</p>
+          <p className="text-gray-400 font-medium">Loading venue map...</p>
         </div>
       </div>
     );
@@ -39,16 +39,16 @@ export default function BookingPage({ params }: { params: Promise<{ id: string }
 
   if (error || !event) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50 text-red-500">
+      <div className="flex items-center justify-center min-h-screen bg-slate-950 text-red-500">
         <p>Failed to load event. Please try refreshing.</p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden bg-background-dark text-white">
+    <div className="flex flex-col h-[calc(100vh-4rem)] overflow-hidden bg-slate-950 text-white">
       {/* Header */}
-      <header className="border-b border-gray-800 bg-background-darker/50 py-4 px-6 shadow-sm z-10 flex justify-between items-center shrink-0 backdrop-blur-md">
+      <header className="border-b border-gray-800 bg-slate-900/50 py-4 px-6 shadow-sm z-10 flex justify-between items-center shrink-0 backdrop-blur-md">
         <div>
           <h1 className="font-bold text-xl text-white">{event.name}</h1>
           <p className="text-sm text-gray-400 flex items-center gap-2">
