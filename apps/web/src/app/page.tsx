@@ -1,6 +1,8 @@
 import { fetchServer } from '@/lib/fetchers';
 import { gql } from 'graphql-request';
 import { EventCard } from '@/components/events/EventCard';
+import { HotEventBanner } from '@/components/events/HotEventBanner';
+import { ReloadButton } from '@/components/ui/ReloadButton';
 import { Button } from '@/components/ui/Button';
 import Link from 'next/link';
 import { ArrowRight, Ticket } from 'lucide-react';
@@ -9,6 +11,17 @@ import { ArrowRight, Ticket } from 'lucide-react';
 export const dynamic = 'force-dynamic';
 const GET_EVENTS = gql`
   query GetPublicEvents {
+    hotEvent {
+      id
+      name
+      date
+      description
+      imageUrl
+      venue {
+        name
+        location
+      }
+    }
     events {
       id
       name
@@ -25,11 +38,13 @@ const GET_EVENTS = gql`
 
 export default async function HomePage() {
   let events = [];
+  let hotEvent = null;
   let error = null;
 
   try {
-    const data = await fetchServer(GET_EVENTS);
-    events = (data as any)?.events || [];
+    const data: any = await fetchServer(GET_EVENTS);
+    events = data?.events || [];
+    hotEvent = data?.hotEvent;
   } catch (err) {
     console.error("Failed to fetch homepage events:", err);
     error = "Unable to load events at this time.";
@@ -70,6 +85,9 @@ export default async function HomePage() {
 
       {/* Featured Events */}
       <section className="py-16 container mx-auto px-6">
+        {/* Hot Event Highland */}
+        {error ? null : hotEvent && <HotEventBanner event={hotEvent} />}
+        
         <div className="flex justify-between items-end mb-8">
           <div>
             <h2 className="text-3xl font-bold text-white">Trending Now</h2>
@@ -83,7 +101,7 @@ export default async function HomePage() {
         {error ? (
           <div className="text-center py-12 bg-slate-900 rounded-2xl border border-slate-700">
             <p className="text-slate-500">{error}</p>
-            <Button variant="outline" className="mt-4" onClick={() => window.location.reload()}>Try Again</Button>
+            <ReloadButton />
           </div>
         ) : events.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

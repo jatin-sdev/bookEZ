@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { 
   Home, Calendar, Trophy, Music, Info, LayoutDashboard, Ticket, Wallet,
-  Shield, MapPin, ChevronLeft, ChevronRight, X
+  Shield, MapPin, ChevronLeft, ChevronRight, X, BarChart
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isAuthenticated, logout } from "@/utils/auth-utils";
@@ -63,6 +63,7 @@ export default function Sidebar({ isCollapsed, toggleCollapse, isMobileOpen, set
 
   const adminNavItems = [
     { name: "Admin Panel", href: "/admin", icon: Shield },
+    { name: "Analytics Center", href: "/admin/analytics", icon: BarChart },
     { name: "Event Management", href: "/admin/events", icon: Calendar },
     { name: "Venue Config", href: "/admin/venues", icon: MapPin },
   ];

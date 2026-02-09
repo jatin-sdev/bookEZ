@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { apiRequest } from '@/lib/api';
 import Footer from '@/components/Footer';
-import { Calendar, MapPin, TrendingUp, Building2, Ticket, Plus, Users, DollarSign, ArrowRight } from 'lucide-react';
+import { Calendar, MapPin, TrendingUp, Building2, Ticket, Plus, Users, DollarSign, ArrowRight, BarChart } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface Event {
@@ -101,6 +101,12 @@ export default function AdminDashboard() {
             </p>
           </div>
           <div className="flex gap-2">
+            <Link href="/admin/analytics">
+              <Button variant="secondary" size="sm" className="h-9 gap-2">
+                <BarChart className="w-3.5 h-3.5" />
+                Analytics
+              </Button>
+            </Link>
             <Link href="/admin/venues/new">
               <Button variant="outline" size="sm" className="h-9 gap-2">
                 <Plus className="w-3.5 h-3.5" />

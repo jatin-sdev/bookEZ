@@ -379,6 +379,33 @@ export class EventService {
       return publishedEvent;
     });
   }
+
+  async getEventStats(eventId: string) {
+      // 1. Get Real-time demand (velocity)
+      const { getBookingRate, getViewRate } = await import('../services/demand.service');
+      const bookingRate = await getBookingRate(eventId);
+      const viewRate = await getViewRate(eventId);
+
+      // 2. Get Inventory State
+      // Note: Counting from the partition is ideal, but querying the master 'event_seats' works if partitions are attached.
+      // Drizzle doesn't always play nice with partitions directly, so raw SQL is safest for "Count by Status"
+      const result = await db.execute(sql`
+        SELECT 
+           COUNT(*) as total,
+           COUNT(*) FILTER (WHERE status = 'BOOKED') as booked
+        FROM "event_seats"
+        WHERE event_id = ${eventId}::uuid
+      `);
+      
+      const stats = result.rows[0] as { total: string, booked: string };
+      
+      return {
+          bookingRate,
+          viewRate,
+          totalCapacity: parseInt(stats.total) || 0,
+          bookedSeats: parseInt(stats.booked) || 0
+      };
+  }
 }
 
 export const eventService = new EventService();

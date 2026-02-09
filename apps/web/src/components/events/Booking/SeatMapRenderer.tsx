@@ -26,10 +26,10 @@ interface SeatMapRendererProps {
 }
 
 // --- Constants ---
-const SEAT_SIZE = 34;
-const SEAT_RADIUS = 8; // Border radius for semi-squared
-const GRID_GAP_X = 50;
-const GRID_GAP_Y = 60;
+const SEAT_SIZE = 50;
+const SEAT_RADIUS = 12; // Border radius for semi-squared
+const GRID_GAP_X = 66;
+const GRID_GAP_Y = 76;
 const CANVAS_SIZE = 2000;
 const STAGE_Y_OFFSET = 200; // Push seats down to make room for stage
 const VISUAL_CENTER_OFFSET = 180; // Shift content slightly left as requested
@@ -51,16 +51,16 @@ const calculateLayout = (seats: SeatData[]) => {
   
   // Calculate grid dimensions
   const colSpan = maxSeatNum - minSeatNum + 1;
-  const gridWidth = colSpan * GRID_GAP_X;
+  // [FIX] Use (colSpan - 1) to calculate center-to-center width for perfect alignment
+  const gridWidth = Math.max(0, (colSpan - 1)) * GRID_GAP_X;
   
   // Dynamic Canvas Size
   // Ensure it's at least the default size, but expand if grid is huge
-  // [FIX] Reduced min size to tighten the layout. Enough for stage (800) + padding.
-  // [Adjust] Adding a bit more padding but ensuring it is symmetric.
   const contentWidth = Math.max(1200, gridWidth + 400); 
   const contentHeight = STAGE_Y_OFFSET + (rows.length * GRID_GAP_Y) + 300;
 
-  const startX = (contentWidth - gridWidth) / 2;
+  // Center the grid: ContentCenter - HalfGridWidth
+  const startX = (contentWidth / 2) - (gridWidth / 2);
 
   const processedSeats = seats.map(seat => {
     // 1. Use DB Coordinates if available
@@ -93,7 +93,7 @@ const Seat = memo(({ seat, isSelected, isDisabled, onClick }: {
   // Determine Visual Style
   const colorClass = useMemo(() => {
     if (isSelected) return 'fill-primary stroke-primary shadow-[0_0_10px_theme(colors.primary.DEFAULT)]';
-    if (seat.status === 'BOOKED') return 'fill-gray-800 stroke-gray-700 opacity-60 pointer-events-none';
+    if (seat.status === 'BOOKED') return 'fill-gray-900 stroke-gray-700 opacity-60 pointer-events-none';
     if (seat.status === 'LOCKED') return 'fill-[#b45309]/20 stroke-[#f97316] pointer-events-none'; // Orange-500 equivalent
     if (seat.status === 'RESERVED') return 'fill-[#b45309]/20 stroke-[#f97316] pointer-events-none'; 
     
@@ -141,9 +141,9 @@ const Seat = memo(({ seat, isSelected, isDisabled, onClick }: {
         textAnchor="middle" 
         alignmentBaseline="middle"
         className={cn(
-            "pointer-events-none font-bold select-none font-sans",
-            seat.label.length > 2 ? "text-[8px]" : "text-[10px]", // Scale down if label is long
-            isSelected ? "fill-white" : (seat.status === 'BOOKED' ? 'fill-gray-600' : "fill-gray-400")
+            "pointer-events-none font-bold select-none font-sans ",
+            seat.label.length > 2 ? "text-[14px]" : "text-[16px]", // Scale down if label is long
+            isSelected ? "fill-white" : (seat.status === 'BOOKED' ? 'fill-gray-600' : "fill-slate-200")
         )}
       >
         {seat.label}

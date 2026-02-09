@@ -31,6 +31,10 @@ const envSchema = z.object({
   // Razorpay Configuration
   RAZORPAY_KEY_ID: isTestEnv ? z.string().default('test') : z.string().min(1, "Razorpay Key ID is required"),
   RAZORPAY_KEY_SECRET: isTestEnv ? z.string().default('test') : z.string().min(1, "Razorpay Key Secret is required"),
+
+  // ML Tuning
+  HOT_EVENT_BOOKING_THRESHOLD: z.coerce.number().default(5),
+  HOT_EVENT_VIEW_THRESHOLD: z.coerce.number().default(10),
 });
 
 // Parse and validate

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Calendar, MapPin, Info, Image as ImageIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/Button';
+import { ViewTracker } from '@/components/events/ViewTracker';
 
 // Query for a single event
 export const dynamic = 'force-dynamic';
@@ -80,6 +81,7 @@ export default async function EventDetailsPage({ params }: PageProps) {
 
   return (
     <div className="bg-slate-950 min-h-screen pb-12 text-slate-200 font-sans">
+      <ViewTracker eventId={event.id} />
       {/* 1. Header / Hero */}
       <div className="bg-slate-900 border-b border-slate-700">
         <div className="container max-w-6xl mx-auto px-4 py-8">

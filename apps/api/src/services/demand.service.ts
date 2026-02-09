@@ -33,3 +33,36 @@ export async function getBookingRate(eventId: string): Promise<number> {
 
   return Number(count);
 }
+
+// --- View Tracking for Hot Events ---
+
+export async function recordView(eventId: string) {
+  const key = `views:event:${eventId}`;
+  const now = Date.now();
+  const uniqueId = `view_${now}_${Math.random()}`; // Simple unique ID for the view event
+
+  // Add view timestamp
+  await redis.zadd(key, now, uniqueId);
+
+  // Remove old views (keep only last hour)
+  await redis.zremrangebyscore(
+    key,
+    0,
+    now - DEMAND_WINDOW_SECONDS * 1000
+  );
+
+  await redis.expire(key, DEMAND_WINDOW_SECONDS);
+}
+
+export async function getViewRate(eventId: string): Promise<number> {
+  const key = `views:event:${eventId}`;
+  const now = Date.now();
+
+  const count = await redis.zcount(
+    key,
+    now - DEMAND_WINDOW_SECONDS * 1000,
+    now
+  );
+
+  return Number(count);
+}
